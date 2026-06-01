@@ -1,0 +1,1712 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="BRUTAL CUT — барбершоп у Києві. Стрижки, гоління, оформлення бороди. Записатись: +38 (093) 000-00-00">
+<meta property="og:title" content="BRUTAL CUT — Barbershop Київ">
+<meta property="og:description" content="Стиль що говорить за себе. Барбершоп у серці Києва на Хрещатику.">
+<title>BRUTAL CUT — Barbershop Київ</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✂️</text></svg>">
+<style>
+/* ═══ VARIABLES ═══ */
+:root {
+  --gold: #C9A84C;
+  --gold-light: #E8C97A;
+  --gold-mid: #A87C2A;
+  --gold-glow: rgba(201,168,76,.35);
+  --bg: #0D0D0D;
+  --bg-card: #161616;
+  --bg-section: #111111;
+  --text: #F0EDE8;
+  --text-soft: #9A9490;
+  --white: #FFFFFF;
+  --radius: 14px;
+  --shadow: 0 8px 32px rgba(0,0,0,.6);
+  --tr: .3s ease;
+}
+
+/* ═══ RESET ═══ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+  cursor: none;
+}
+a { text-decoration: none; color: inherit; }
+img { display: block; max-width: 100%; }
+button { cursor: none; border: none; background: none; font-family: inherit; }
+
+/* ═══ NOISE OVERLAY ═══ */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+  opacity: .028;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* ═══ CUSTOM CURSOR — FINGER ═══ */
+#cursor {
+  position: fixed;
+  width: 28px; height: 28px;
+  pointer-events: none;
+  z-index: 100000;
+  transform: translate(-4px, -4px);
+  transition: transform .15s ease, filter .2s;
+  filter: drop-shadow(0 0 4px rgba(201,168,76,.5));
+}
+#cursor svg { width: 28px; height: 28px; }
+#cursor-ring {
+  position: fixed;
+  width: 44px; height: 44px;
+  border: 2px solid rgba(201,168,76,.5);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99998;
+  transform: translate(-50%,-50%);
+  transition: width .2s, height .2s, border-color .2s, opacity .2s;
+  opacity: 0;
+}
+body.cursor-hover #cursor { filter: drop-shadow(0 0 8px var(--gold)); transform: translate(-4px,-4px) scale(1.15); }
+body.cursor-hover #cursor-ring { opacity: .6; }
+body.cursor-service #cursor { transform: translate(-4px,-4px) scale(1.2); filter: drop-shadow(0 2px 10px var(--gold)); }
+body.cursor-service #cursor-ring {
+  opacity: .8;
+  border-color: var(--gold);
+  width: 56px; height: 56px;
+  box-shadow: 0 0 16px var(--gold-glow);
+}
+
+/* ═══ PARTICLES ═══ */
+.particle {
+  position: fixed;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--gold-light), transparent);
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0;
+  animation: floatUp linear infinite;
+}
+@keyframes floatUp {
+  0%   { opacity: 0; transform: translateY(100vh) scale(0); }
+  10%  { opacity: .18; }
+  90%  { opacity: .08; }
+  100% { opacity: 0; transform: translateY(-10vh) scale(1); }
+}
+
+/* ═══ SCROLL REVEAL ═══ */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity .6s ease, transform .6s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* ═══ NAVBAR ═══ */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  padding: 0 48px;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: background .4s ease, border-color .4s ease, box-shadow .4s ease;
+  border-bottom: 1px solid transparent;
+}
+nav.scrolled {
+  background: rgba(13,13,13,.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(201,168,76,.2);
+  box-shadow: 0 4px 32px rgba(0,0,0,.5);
+}
+.nav-logo {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.nav-logo span { color: var(--gold); }
+.nav-links {
+  display: flex;
+  gap: 36px;
+  list-style: none;
+}
+.nav-links a {
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  transition: color var(--tr);
+  position: relative;
+}
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px; left: 0; right: 0;
+  height: 1px;
+  background: var(--gold);
+  transform: scaleX(0);
+  transition: transform var(--tr);
+}
+.nav-links a:hover { color: var(--text); }
+.nav-links a:hover::after { transform: scaleX(1); }
+.nav-right { display: flex; align-items: center; gap: 16px; }
+.lang-switch {
+  display: flex;
+  gap: 2px;
+  background: rgba(255,255,255,.06);
+  border-radius: 8px;
+  padding: 3px;
+}
+.lang-btn {
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .1em;
+  color: var(--text-soft);
+  transition: all var(--tr);
+}
+.lang-btn.active {
+  background: var(--gold);
+  color: var(--bg);
+}
+.btn-book {
+  padding: 10px 22px;
+  border: 1.5px solid var(--gold);
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: .1em;
+  color: var(--gold);
+  text-transform: uppercase;
+  transition: all var(--tr);
+  min-height: 40px;
+}
+.btn-book:hover {
+  background: var(--gold);
+  color: var(--bg);
+  box-shadow: 0 0 20px var(--gold-glow);
+  transform: translateY(-1px) scale(1.01);
+}
+.burger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  width: 28px;
+  padding: 4px;
+  background: none;
+  border: none;
+}
+.burger span {
+  display: block;
+  width: 100%;
+  height: 2px;
+  background: var(--text);
+  border-radius: 2px;
+  transition: all .3s ease;
+}
+.burger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.burger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+.burger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+.mobile-menu {
+  display: none;
+  position: fixed;
+  top: 70px; left: 0; right: 0;
+  background: rgba(13,13,13,.98);
+  backdrop-filter: blur(20px);
+  padding: 24px 48px 32px;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 999;
+  border-bottom: 1px solid rgba(201,168,76,.15);
+}
+.mobile-menu.open { display: flex; }
+.mobile-menu a {
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255,255,255,.06);
+  transition: color var(--tr);
+}
+.mobile-menu a:hover { color: var(--gold); }
+.mobile-menu .btn-book {
+  margin-top: 12px;
+  display: block;
+  text-align: center;
+}
+
+/* ═══ HERO ═══ */
+#hero {
+  position: relative;
+  min-height: 100vh;
+  margin-top: -70px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  overflow: hidden;
+  padding: 0 48px;
+  gap: 40px;
+}
+#hero-bg {
+  position: absolute;
+  inset: -6%;
+  background: url('1.jpg') center/cover no-repeat;
+  opacity: .40;
+  will-change: transform;
+  animation: heroBreathe 9s ease-in-out infinite;
+}
+#hero-bg-fallback {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #1a1208 0%, #0d0d0d 50%, #0a0e14 100%);
+  z-index: -1;
+}
+@keyframes heroBreathe {
+  0%, 100% { transform: scale(1); }
+  50%       { transform: scale(1.04); }
+}
+#hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(0,0,0,.85) 0%, rgba(0,0,0,.5) 50%, rgba(0,0,0,.15) 100%);
+  pointer-events: none;
+}
+.hero-scanlines {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 3px,
+    rgba(255,255,255,.012) 3px,
+    rgba(255,255,255,.012) 4px
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+.hero-left {
+  position: relative;
+  z-index: 2;
+  padding: 120px 0 80px;
+}
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 16px;
+  border: 1px solid rgba(201,168,76,.4);
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--gold-light);
+  margin-bottom: 28px;
+  background: rgba(201,168,76,.06);
+}
+.hero-left h1 {
+  font-size: clamp(42px, 5.5vw, 78px);
+  font-weight: 900;
+  line-height: 1.0;
+  letter-spacing: -.02em;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  animation: glitch 4s infinite;
+}
+@keyframes glitch {
+  0%, 92%, 100% { text-shadow: none; }
+  93% { text-shadow: 3px 0 0 rgba(255,0,80,.6), -3px 0 0 rgba(0,200,255,.6); transform: translate(2px, 0); }
+  94% { text-shadow: -3px 0 0 rgba(255,0,80,.6), 3px 0 0 rgba(0,200,255,.6); transform: translate(-2px, 0); }
+  95% { text-shadow: none; transform: none; }
+  96% { text-shadow: 2px 0 0 rgba(255,0,80,.4), -2px 0 0 rgba(0,200,255,.4); transform: translate(1px, 0); }
+  97% { text-shadow: none; transform: none; }
+}
+.hero-left h1 .gold { color: var(--gold); }
+.hero-utp {
+  font-size: 16px;
+  color: var(--text-soft);
+  line-height: 1.6;
+  margin-bottom: 36px;
+  max-width: 440px;
+}
+.hero-btns {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.btn-primary {
+  padding: 14px 30px;
+  background: var(--gold);
+  color: var(--bg);
+  border-radius: var(--radius);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  transition: all var(--tr);
+  box-shadow: 0 0 24px var(--gold-glow), 0 4px 16px rgba(0,0,0,.4);
+  min-height: 52px;
+  display: inline-flex;
+  align-items: center;
+  border: none;
+}
+.btn-primary:hover {
+  background: var(--gold-light);
+  box-shadow: 0 0 40px var(--gold-glow), 0 6px 20px rgba(0,0,0,.5);
+  transform: translateY(-2px) scale(1.01);
+}
+.btn-outline {
+  padding: 14px 30px;
+  border: 1.5px solid rgba(201,168,76,.5);
+  color: var(--text);
+  border-radius: var(--radius);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  background: rgba(255,255,255,.04);
+  backdrop-filter: blur(10px);
+  transition: all var(--tr);
+  min-height: 52px;
+  display: inline-flex;
+  align-items: center;
+}
+.btn-outline:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+  background: rgba(201,168,76,.08);
+  transform: translateY(-2px) scale(1.01);
+}
+.hero-right {
+  position: relative;
+  z-index: 2;
+  padding: 120px 0 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.hero-card {
+  background: rgba(22,22,22,.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(201,168,76,.12);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  transition: border-color var(--tr), transform var(--tr);
+}
+.hero-card:hover {
+  border-color: rgba(201,168,76,.35);
+  transform: translateX(4px);
+}
+.hero-card-icon {
+  font-size: 24px;
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(201,168,76,.1);
+  border-radius: 10px;
+}
+.hero-card-text strong {
+  display: block;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 2px;
+}
+.hero-card-text span {
+  font-size: 12px;
+  color: var(--text-soft);
+}
+
+/* ═══ SECTION DIVIDER ═══ */
+.divider-clip {
+  height: 60px;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 60%);
+  margin-top: -1px;
+}
+.divider-clip-rev {
+  height: 60px;
+  clip-path: polygon(0 40%, 100% 0, 100% 100%, 0 100%);
+  margin-bottom: -1px;
+}
+
+/* ═══ ABOUT ═══ */
+#about {
+  background: var(--bg-section);
+  padding: 100px 48px;
+}
+.about-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: stretch;
+}
+.about-img-wrap {
+  overflow: hidden;
+  border-radius: 20px;
+  min-height: 480px;
+  position: relative;
+  background: var(--bg-card);
+}
+.about-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform .5s ease;
+}
+.about-img-wrap:hover img { transform: scale(1.04); }
+.about-img-placeholder {
+  width: 100%;
+  height: 100%;
+  min-height: 480px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 80px;
+  background: linear-gradient(135deg, #161616, #1e1a12);
+}
+.about-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 20px;
+}
+.section-tag {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .25em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 4px;
+}
+.section-title {
+  font-size: clamp(28px, 3.5vw, 44px);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -.02em;
+  text-transform: uppercase;
+}
+.about-text {
+  font-size: 15px;
+  color: var(--text-soft);
+  line-height: 1.7;
+}
+.about-features {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 8px;
+}
+.about-feature {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+.about-feature-icon {
+  width: 40px; height: 40px;
+  border-radius: 10px;
+  background: rgba(201,168,76,.1);
+  border: 1px solid rgba(201,168,76,.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+.about-feature-text strong { display: block; font-size: 14px; font-weight: 700; margin-bottom: 2px; }
+.about-feature-text span { font-size: 13px; color: var(--text-soft); }
+
+/* ═══ SERVICES ═══ */
+#services {
+  background: #0a0a0f;
+  padding: 100px 48px;
+  position: relative;
+  overflow: hidden;
+}
+/* iOS 26 liquid glass blobs */
+#services::before,
+#services::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  pointer-events: none;
+  z-index: 0;
+}
+#services::before {
+  width: 520px; height: 520px;
+  background: radial-gradient(circle, rgba(201,168,76,.18) 0%, rgba(120,60,180,.12) 50%, transparent 70%);
+  top: -100px; left: -80px;
+  animation: blobDrift1 14s ease-in-out infinite alternate;
+}
+#services::after {
+  width: 440px; height: 440px;
+  background: radial-gradient(circle, rgba(80,140,255,.13) 0%, rgba(201,168,76,.10) 50%, transparent 70%);
+  bottom: -80px; right: -60px;
+  animation: blobDrift2 18s ease-in-out infinite alternate;
+}
+.services-blob-mid {
+  position: absolute;
+  width: 360px; height: 360px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,100,80,.08) 0%, rgba(201,168,76,.06) 50%, transparent 70%);
+  filter: blur(70px);
+  top: 40%; left: 45%;
+  transform: translate(-50%,-50%);
+  pointer-events: none;
+  z-index: 0;
+  animation: blobDrift3 20s ease-in-out infinite alternate;
+}
+@keyframes blobDrift1 {
+  0%   { transform: translate(0,0) scale(1); }
+  100% { transform: translate(60px,40px) scale(1.15); }
+}
+@keyframes blobDrift2 {
+  0%   { transform: translate(0,0) scale(1); }
+  100% { transform: translate(-50px,-30px) scale(1.1); }
+}
+@keyframes blobDrift3 {
+  0%   { transform: translate(-50%,-50%) scale(1); }
+  100% { transform: translate(-40%,-60%) scale(1.2); }
+}
+/* glass mesh grid overlay */
+#services .services-glass-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(201,168,76,.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(201,168,76,.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+  z-index: 0;
+}
+#services .services-header,
+#services .services-grid { position: relative; z-index: 1; }
+.services-header {
+  max-width: 1200px;
+  margin: 0 auto 48px;
+  text-align: center;
+}
+.services-header p { color: var(--text-soft); font-size: 15px; margin-top: 12px; }
+.services-grid {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+.service-card {
+  background: var(--bg-card);
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,.06);
+  transition: transform var(--tr), border-color var(--tr), box-shadow var(--tr);
+  position: relative;
+  cursor: none;
+}
+.service-card:hover {
+  transform: translateY(-10px);
+  border-color: var(--gold-mid);
+  box-shadow: 0 20px 50px rgba(201,168,76,.12), 0 8px 24px rgba(0,0,0,.6);
+}
+.service-badge {
+  position: absolute;
+  top: 12px; right: 12px;
+  background: var(--gold);
+  color: var(--bg);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  padding: 5px 10px;
+  border-radius: 6px;
+  opacity: 0;
+  transition: opacity var(--tr);
+  z-index: 3;
+}
+.service-card:hover .service-badge { opacity: 1; }
+.service-card-top {
+  aspect-ratio: 16/10;
+  background: linear-gradient(135deg, #1a1208, #0d0d0d);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 44px;
+  position: relative;
+  overflow: hidden;
+}
+.service-card-top img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--tr);
+}
+.service-card:hover .service-card-top img { transform: scale(1.07); }
+.service-card-top::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 50%;
+  background: linear-gradient(transparent, var(--bg-card));
+}
+.service-card.vip .service-card-top {
+  background: linear-gradient(135deg, #1e1408, #2a1e06, #1a1208);
+}
+.service-card.vip { border-color: rgba(201,168,76,.3); }
+.service-vip-badge {
+  position: absolute;
+  top: 12px; left: 12px;
+  background: linear-gradient(135deg, var(--gold), var(--gold-mid));
+  color: var(--bg);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  padding: 5px 10px;
+  border-radius: 6px;
+  z-index: 3;
+}
+.service-card-body { padding: 20px 22px 22px; }
+.service-num { font-size: 11px; font-weight: 700; letter-spacing: .2em; color: var(--gold); margin-bottom: 6px; }
+.service-name { font-size: 17px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; margin-bottom: 6px; }
+.service-desc { font-size: 13px; color: var(--text-soft); line-height: 1.5; margin-bottom: 16px; }
+.service-footer { display: flex; align-items: center; justify-content: space-between; }
+.service-price { font-size: 16px; font-weight: 700; color: var(--gold-light); }
+.service-arrow {
+  width: 34px; height: 34px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  color: var(--text-soft);
+  transition: all var(--tr);
+}
+.service-card:hover .service-arrow,
+.service-card.vip .service-arrow {
+  background: var(--gold);
+  color: var(--bg);
+  border-color: var(--gold);
+  box-shadow: 0 0 12px var(--gold-glow);
+}
+
+/* ═══ REVIEWS ═══ */
+#reviews {
+  background: var(--bg-section);
+  padding: 100px 0;
+}
+.reviews-header {
+  max-width: 1200px;
+  margin: 0 auto 48px;
+  text-align: center;
+  padding: 0 48px;
+}
+.reviews-scroll {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding: 12px 48px 20px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--gold) rgba(255,255,255,.06);
+}
+.reviews-scroll::-webkit-scrollbar { height: 4px; }
+.reviews-scroll::-webkit-scrollbar-track { background: rgba(255,255,255,.06); border-radius: 2px; }
+.reviews-scroll::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 2px; }
+.review-card {
+  flex: 0 0 320px;
+  scroll-snap-align: start;
+  background: var(--bg-card);
+  border: 1px solid rgba(255,255,255,.07);
+  border-radius: 18px;
+  padding: 24px;
+  transition: transform var(--tr), border-color var(--tr), box-shadow var(--tr);
+}
+.review-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(201,168,76,.2);
+  box-shadow: 0 12px 32px rgba(0,0,0,.5);
+}
+.review-stars { font-size: 15px; margin-bottom: 12px; letter-spacing: 2px; }
+.review-text { font-size: 14px; font-style: italic; color: var(--text-soft); line-height: 1.65; margin-bottom: 20px; }
+.review-author { display: flex; align-items: center; gap: 12px; }
+.review-avatar {
+  width: 42px; height: 42px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--gold-mid), var(--gold));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--bg);
+  flex-shrink: 0;
+}
+.review-meta strong { display: block; font-size: 14px; font-weight: 700; }
+.review-meta span { font-size: 12px; color: var(--text-soft); }
+
+/* ═══ FAQ ═══ */
+#faq {
+  background: var(--bg);
+  padding: 100px 48px;
+}
+.faq-inner { max-width: 760px; margin: 0 auto; }
+.faq-header { text-align: center; margin-bottom: 48px; }
+.faq-header p { color: var(--text-soft); font-size: 15px; margin-top: 12px; }
+.faq-item {
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 16px;
+  margin-bottom: 12px;
+  overflow: hidden;
+  transition: border-color var(--tr), box-shadow var(--tr);
+  background: var(--bg-card);
+}
+.faq-item.open {
+  border-color: rgba(201,168,76,.4);
+  box-shadow: 0 0 24px rgba(201,168,76,.08);
+}
+.faq-q {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 22px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  text-align: left;
+  gap: 16px;
+  min-height: 64px;
+  cursor: none;
+}
+.faq-toggle {
+  width: 32px; height: 32px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  color: var(--text-soft);
+  flex-shrink: 0;
+  transition: all var(--tr);
+  line-height: 1;
+}
+.faq-item.open .faq-toggle {
+  transform: rotate(45deg);
+  color: var(--gold);
+  border-color: var(--gold);
+  background: rgba(201,168,76,.1);
+}
+.faq-a { max-height: 0; overflow: hidden; transition: max-height .4s ease; }
+.faq-item.open .faq-a { max-height: 300px; }
+.faq-a p { padding: 0 22px 20px; font-size: 14px; color: var(--text-soft); line-height: 1.7; }
+.faq-cta {
+  text-align: center;
+  margin-top: 40px;
+  padding: 32px;
+  border: 1px solid rgba(201,168,76,.15);
+  border-radius: 20px;
+  background: rgba(201,168,76,.04);
+}
+.faq-cta p { color: var(--text-soft); font-size: 15px; margin-bottom: 16px; }
+
+/* ═══ FOOTER ═══ */
+footer {
+  background: #0a0a0a;
+  padding: 64px 48px 32px;
+  border-top: 1px solid rgba(255,255,255,.06);
+}
+.footer-grid {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1.2fr;
+  gap: 48px;
+  padding-bottom: 40px;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+}
+.footer-logo { font-size: 24px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 10px; }
+.footer-logo span { color: var(--gold); }
+.footer-slogan { font-size: 13px; color: var(--text-soft); margin-bottom: 20px; line-height: 1.5; }
+.footer-socials { display: flex; gap: 8px; }
+.social-btn {
+  width: 38px; height: 38px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  color: var(--text-soft);
+  transition: all var(--tr);
+}
+.social-btn:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+  background: rgba(201,168,76,.08);
+  transform: translateY(-2px);
+}
+.footer-col h4 {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .25em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 20px;
+}
+.footer-nav { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.footer-nav a { font-size: 14px; color: var(--text-soft); transition: color var(--tr); }
+.footer-nav a:hover { color: var(--text); }
+.footer-contacts { display: flex; flex-direction: column; gap: 10px; }
+.footer-contact {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: var(--text-soft);
+  transition: color var(--tr);
+}
+.footer-contact:hover { color: var(--text); }
+.footer-contact-icon { font-size: 16px; flex-shrink: 0; }
+.footer-bottom {
+  max-width: 1200px;
+  margin: 24px auto 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--text-soft);
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+/* ═══ POPUP ═══ */
+#popup-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.75);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  z-index: 10000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+#popup-overlay.open { display: flex; }
+.popup-box {
+  background: #161616;
+  border: 1px solid rgba(201,168,76,.2);
+  border-radius: 24px;
+  padding: 36px;
+  width: 100%;
+  max-width: 480px;
+  position: relative;
+  animation: popupIn .35s ease;
+  box-shadow: 0 32px 80px rgba(0,0,0,.7), 0 0 40px rgba(201,168,76,.08);
+}
+@keyframes popupIn {
+  from { opacity: 0; transform: translateY(30px) scale(.96); }
+  to   { opacity: 1; transform: none; }
+}
+.popup-close {
+  position: absolute;
+  top: 16px; right: 16px;
+  width: 36px; height: 36px;
+  border-radius: 8px;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: var(--text-soft);
+  transition: all var(--tr);
+  cursor: none;
+}
+.popup-close:hover { background: rgba(201,168,76,.1); border-color: var(--gold); color: var(--gold); }
+.popup-title { font-size: 22px; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; margin-bottom: 6px; }
+.popup-service-badge {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  background: rgba(201,168,76,.1);
+  border: 1px solid rgba(201,168,76,.25);
+  border-radius: 8px;
+  font-size: 13px;
+  color: var(--gold-light);
+  font-weight: 600;
+  margin-bottom: 20px;
+  width: fit-content;
+}
+.popup-service-badge.show { display: flex; }
+.popup-form { display: flex; flex-direction: column; gap: 14px; }
+.popup-form input,
+.popup-form textarea {
+  width: 100%;
+  padding: 13px 16px;
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 14px;
+  transition: border-color var(--tr);
+  outline: none;
+  min-height: 48px;
+}
+.popup-form input:focus,
+.popup-form textarea:focus {
+  border-color: var(--gold);
+  background: rgba(201,168,76,.04);
+}
+.popup-form textarea { min-height: 90px; resize: vertical; }
+.popup-form input::placeholder,
+.popup-form textarea::placeholder { color: var(--text-soft); }
+.popup-submit {
+  padding: 14px;
+  background: var(--gold);
+  color: var(--bg);
+  border-radius: var(--radius);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  transition: all var(--tr);
+  min-height: 52px;
+  box-shadow: 0 0 20px var(--gold-glow);
+  cursor: none;
+  border: none;
+}
+.popup-submit:hover {
+  background: var(--gold-light);
+  box-shadow: 0 0 32px var(--gold-glow);
+  transform: translateY(-1px);
+}
+
+/* ═══ RESPONSIVE ═══ */
+@media (max-width: 960px) {
+  nav { padding: 0 24px; }
+  .nav-links { display: none; }
+  .burger { display: flex; }
+  .mobile-menu { padding: 20px 24px 28px; }
+  #hero { grid-template-columns: 1fr; padding: 0 24px; gap: 0; }
+  .hero-right {
+    order: -1;
+    padding: 110px 0 16px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .hero-left { padding: 16px 0 80px; }
+  .services-grid { grid-template-columns: repeat(2, 1fr); }
+  #about { padding: 80px 24px; }
+  .about-inner { grid-template-columns: 1fr; gap: 36px; }
+  .about-img-wrap { min-height: 280px; }
+  .about-img-placeholder { min-height: 280px; }
+  footer { padding: 48px 24px 24px; }
+  .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+  #services { padding: 80px 24px; }
+  #faq { padding: 80px 24px; }
+  #reviews { padding: 80px 0; }
+}
+@media (max-width: 768px) {
+  .services-grid { grid-template-columns: 1fr; }
+  .footer-grid { grid-template-columns: 1fr; gap: 28px; }
+}
+@media (max-width: 480px) {
+  .hero-right { grid-template-columns: 1fr; }
+  .hero-btns { flex-direction: column; }
+  .btn-primary, .btn-outline { width: 100%; justify-content: center; }
+  .reviews-scroll { padding: 12px 20px 20px; }
+  #about, #services, #faq { padding: 64px 20px; }
+  footer { padding: 40px 20px 20px; }
+  .footer-bottom { flex-direction: column; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ CURSOR ═══ -->
+<div id="cursor">
+  <svg viewBox="0 0 28 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M6 1.5C6 1.5 6 20 6 22C6 22 5 23 4 24C3 25 3 26.5 4.5 27.5C6 28.5 7.5 27 8 26L9 24.5C9 24.5 9.5 26 10.5 27C11.5 28 13 28 14 27C14.5 26.5 14.5 25.5 14.5 25.5C14.5 25.5 15.5 26.5 16.5 26.5C17.5 26.5 18.5 25.5 18.5 24.5C18.5 24.5 19.5 25 20.5 24.5C21.5 24 22 23 22 22V16C22 16 22 14 20 14C20 14 20 12.5 18.5 12.5C18.5 12.5 18 11 16.5 11C16.5 11 16 9.5 14.5 9.5V1.5C14.5 0.5 13.5 0 12.5 0C11.5 0 11 0.5 10.5 1C10 1.5 10 2 10 2V12C10 12 8.5 11.5 7.5 12C6.5 12.5 6 13.5 6 14" stroke="#C9A84C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M6 1.5C6 1.5 6 20 6 22C6 22 5 23 4 24C3 25 3 26.5 4.5 27.5C6 28.5 7.5 27 8 26L9 24.5C9 24.5 9.5 26 10.5 27C11.5 28 13 28 14 27C14.5 26.5 14.5 25.5 14.5 25.5C14.5 25.5 15.5 26.5 16.5 26.5C17.5 26.5 18.5 25.5 18.5 24.5C18.5 24.5 19.5 25 20.5 24.5C21.5 24 22 23 22 22V16C22 16 22 14 20 14C20 14 20 12.5 18.5 12.5C18.5 12.5 18 11 16.5 11C16.5 11 16 9.5 14.5 9.5V1.5C14.5 0.5 13.5 0 12.5 0C11.5 0 11 0.5 10.5 1C10 1.5 10 2 10 2V12" fill="rgba(201,168,76,0.15)"/>
+  </svg>
+</div>
+<div id="cursor-ring"></div>
+
+<!-- ═══ NAVBAR ═══ -->
+<nav id="navbar">
+  <a href="#hero" class="nav-logo">BRUTAL <span>CUT</span></a>
+  <ul class="nav-links">
+    <li><a href="#about" data-uk="Про нас" data-pl="O nas">Про нас</a></li>
+    <li><a href="#services" data-uk="Послуги" data-pl="Usługi">Послуги</a></li>
+    <li><a href="#reviews" data-uk="Відгуки" data-pl="Opinie">Відгуки</a></li>
+    <li><a href="#faq" data-uk="FAQ" data-pl="FAQ">FAQ</a></li>
+  </ul>
+  <div class="nav-right">
+    <div class="lang-switch">
+      <button class="lang-btn active" onclick="setLang('uk')">UA</button>
+      <button class="lang-btn" onclick="setLang('pl')">PL</button>
+    </div>
+    <button class="btn-book" onclick="openPopup()" data-uk="Записатись" data-pl="Umów wizytę">Записатись</button>
+    <button class="burger" id="burger" onclick="toggleMenu()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobile-menu">
+  <a href="#about" onclick="closeMenu()" data-uk="Про нас" data-pl="O nas">Про нас</a>
+  <a href="#services" onclick="closeMenu()" data-uk="Послуги" data-pl="Usługi">Послуги</a>
+  <a href="#reviews" onclick="closeMenu()" data-uk="Відгуки" data-pl="Opinie">Відгуки</a>
+  <a href="#faq" onclick="closeMenu()" data-uk="FAQ" data-pl="FAQ">FAQ</a>
+  <button class="btn-book" onclick="openPopup();closeMenu()" data-uk="Записатись" data-pl="Umów wizytę">Записатись</button>
+</div>
+
+<!-- ═══ HERO ═══ -->
+<section id="hero">
+  <div id="hero-bg-fallback"></div>
+  <div id="hero-bg"></div>
+  <div id="hero-overlay"></div>
+  <div class="hero-scanlines"></div>
+
+  <div class="hero-left reveal">
+    <div class="hero-badge">
+      <span>✂</span>
+      <span data-uk="BARBERSHOP · КИЇВ" data-pl="BARBERSHOP · KIJÓW">BARBERSHOP · КИЇВ</span>
+    </div>
+    <h1>
+      <span data-uk="СТИЛЬ ЩО" data-pl="STYL KTÓRY">СТИЛЬ ЩО</span><br>
+      <span class="gold" data-uk="ГОВОРИТЬ" data-pl="MÓWI">ГОВОРИТЬ</span><br>
+      <span data-uk="ЗА СЕБЕ" data-pl="SAM ZA SIEBIE">ЗА СЕБЕ</span>
+    </h1>
+    <p class="hero-utp" data-uk="Ми не просто стрижемо — ми створюємо образ. Кожен майстер BRUTAL CUT — це художник з бритвою, який знає, як зробити тебе легендою." data-pl="Nie strzyżemy — tworzymy wizerunek. Każdy barber BRUTAL CUT to artysta z brzytwą, który wie jak zrobić z ciebie legendę.">
+      Ми не просто стрижемо — ми створюємо образ. Кожен майстер BRUTAL CUT — це художник з бритвою, який знає, як зробити тебе легендою.
+    </p>
+    <div class="hero-btns">
+      <button class="btn-primary" onclick="openPopup()">
+        <span data-uk="Записатись на стрижку" data-pl="Umów strzyżenie">Записатись на стрижку</span>
+      </button>
+      <a href="#services" class="btn-outline">
+        <span data-uk="Наші послуги" data-pl="Nasze usługi">Наші послуги</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="hero-card reveal">
+      <div class="hero-card-icon">🏆</div>
+      <div class="hero-card-text">
+        <strong data-uk="5+ років досвіду" data-pl="5+ lat doświadczenia">5+ років досвіду</strong>
+        <span data-uk="Сотні задоволених клієнтів у Києві" data-pl="Setki zadowolonych klientów w Kijowie">Сотні задоволених клієнтів у Києві</span>
+      </div>
+    </div>
+    <div class="hero-card reveal">
+      <div class="hero-card-icon">✂️</div>
+      <div class="hero-card-text">
+        <strong data-uk="Топ-майстри" data-pl="Najlepsi barberzy">Топ-майстри</strong>
+        <span data-uk="Сертифіковані барбери міжнародного рівня" data-pl="Certyfikowani barberzy z uprawnieniami">Сертифіковані барбери міжнародного рівня</span>
+      </div>
+    </div>
+    <div class="hero-card reveal">
+      <div class="hero-card-icon">🔥</div>
+      <div class="hero-card-text">
+        <strong data-uk="Брутальна атмосфера" data-pl="Brutalna atmosfera">Брутальна атмосфера</strong>
+        <span data-uk="Вініл, whisky, добра музика" data-pl="Winyl, whisky, dobra muzyka">Вініл, whisky, добра музика</span>
+      </div>
+    </div>
+    <div class="hero-card reveal">
+      <div class="hero-card-icon">💈</div>
+      <div class="hero-card-text">
+        <strong data-uk="Класичні техніки" data-pl="Klasyczne techniki">Класичні техніки</strong>
+        <span data-uk="Фейд, тейпап, королівське гоління" data-pl="Fade, tapeline, królewskie golenie">Фейд, тейпап, королівське гоління</span>
+      </div>
+    </div>
+    <div class="hero-card reveal">
+      <div class="hero-card-icon">⚡</div>
+      <div class="hero-card-text">
+        <strong data-uk="Без черг" data-pl="Bez kolejek">Без черг</strong>
+        <span data-uk="Онлайн-запис та точний час прийому" data-pl="Rezerwacja online i punktualność">Онлайн-запис та точний час прийому</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ ABOUT ═══ -->
+<div class="divider-clip" style="background:var(--bg-section)"></div>
+<section id="about">
+  <div class="about-inner">
+    <div class="about-img-wrap reveal">
+      <img src="2.jpg" alt="BRUTAL CUT barbershop interior" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+      <div class="about-img-placeholder" style="display:none">💈</div>
+    </div>
+    <div class="about-content reveal">
+      <span class="section-tag" data-uk="— ПРО НАС" data-pl="— O NAS">— ПРО НАС</span>
+      <h2 class="section-title" data-uk="МІСЦЕ ДЕ НАРОДЖУЮТЬСЯ ЛЕГЕНДИ" data-pl="MIEJSCE GDZIE RODZĄ SIĘ LEGENDY">МІСЦЕ ДЕ НАРОДЖУЮТЬСЯ ЛЕГЕНДИ</h2>
+      <p class="about-text" data-uk="BRUTAL CUT — це не просто барбершоп. Це простір де справжні чоловіки з Хрещатика зустрічають майстрів свого діла. Ми відкрились у серці Києва і з першого дня поставили стандарт: ніяких компромісів зі стилем." data-pl="BRUTAL CUT to nie zwykły barbershop. To przestrzeń, gdzie prawdziwi mężczyźni spotykają mistrzów swojego rzemiosła. Otwarliśmy się w sercu Kijowa i od pierwszego dnia postawiliśmy standard: żadnych kompromisów ze stylem.">
+        BRUTAL CUT — це не просто барбершоп. Це простір де справжні чоловіки з Хрещатика зустрічають майстрів свого діла. Ми відкрились у серці Києва і з першого дня поставили стандарт: ніяких компромісів зі стилем.
+      </p>
+      <div class="about-features">
+        <div class="about-feature">
+          <div class="about-feature-icon">🪒</div>
+          <div class="about-feature-text">
+            <strong data-uk="Тільки преміум-інструменти" data-pl="Tylko narzędzia premium">Тільки преміум-інструменти</strong>
+            <span data-uk="Wahl, Andis, Feather — ніяких дешевих замін" data-pl="Wahl, Andis, Feather — żadnych tanich zamienników">Wahl, Andis, Feather — ніяких дешевих замін</span>
+          </div>
+        </div>
+        <div class="about-feature">
+          <div class="about-feature-icon">🧴</div>
+          <div class="about-feature-text">
+            <strong data-uk="Оригінальна косметика" data-pl="Oryginalna kosmetyka">Оригінальна косметика</strong>
+            <span data-uk="American Crew, Layrite, Reuzel — тільки оригінал" data-pl="American Crew, Layrite, Reuzel — tylko oryginały">American Crew, Layrite, Reuzel — тільки оригінал</span>
+          </div>
+        </div>
+        <div class="about-feature">
+          <div class="about-feature-icon">📍</div>
+          <div class="about-feature-text">
+            <strong data-uk="Хрещатик, у серці міста" data-pl="Chreszczatyk, w centrum">Хрещатик, у серці міста</strong>
+            <span data-uk="Зручне розташування, є парковка" data-pl="Wygodna lokalizacja, parking">Зручне розташування, є парковка</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="divider-clip-rev" style="background:var(--bg-section)"></div>
+
+<!-- ═══ SERVICES ═══ -->
+<section id="services">
+  <div class="services-glass-grid"></div>
+  <div class="services-blob-mid"></div>
+  <div class="services-header reveal">
+    <span class="section-tag" data-uk="— ПОСЛУГИ" data-pl="— USŁUGI">— ПОСЛУГИ</span>
+    <h2 class="section-title" data-uk="ЩО МИ РОБИМО" data-pl="CO ROBIMY">ЩО МИ РОБИМО</h2>
+    <p data-uk="9 видів послуг для справжнього чоловіка" data-pl="9 usług dla prawdziwego mężczyzny">9 видів послуг для справжнього чоловіка</p>
+  </div>
+  <div class="services-grid">
+
+    <div class="service-card reveal" onclick="openServicePopup('Класична стрижка','від 350 ₴')">
+      <div class="service-badge">📋 <span data-uk="Записатись" data-pl="Umów się">Записатись</span></div>
+      <div class="service-card-top"><span>💈</span><img src="service1.jpg" alt="" onerror="this.remove()"></div>
+      <div class="service-card-body">
+        <div class="service-num">01</div>
+        <div class="service-name" data-uk="Класична стрижка" data-pl="Klasyczne strzyżenie">Класична стрижка</div>
+        <p class="service-desc" data-uk="Чисті лінії, ідеальна форма. Класика що ніколи не виходить з моди." data-pl="Czyste linie, idealna forma. Klasyka, która nigdy nie wychodzi z mody.">Чисті лінії, ідеальна форма. Класика що ніколи не виходить з моди.</p>
+        <div class="service-footer">
+          <span class="service-price" data-uk="від 350 ₴" data-pl="od 350 ₴">від 350 ₴</span>
+          <div class="service-arrow">→</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="service-card reveal" onclick="openServicePopup('Стрижка + борода','від 500 ₴')">
+      <div class="service-badge">📋 <span data-uk="Записатись" data-pl="Umów się">Записатись</span></div>
+      <div class="service-card-top"><span>🧔</span><img src="service2.jpg" alt="" onerror="this.remove()"></div>
+      <div class="service-card-body">
+        <div class="service-num">02</div>
+        <div class="service-name" data-uk="Стрижка + борода" data-pl="Strzyżenie + broda">Стрижка + борода</div>
+        <p class="service-desc" data-uk="Повний образ в одному сеансі. Голова і борода в ідеальній гармонії." data-pl="Pełny look w jednej sesji. Głowa i broda w idealnej harmonii.">Повний образ в одному сеансі. Голова і борода в ідеальній гармонії.</p>
+        <div class="service-footer">
+          <span class="service-price" data-uk="від 500 ₴" data-pl="od 500 ₴">від 500 ₴</span>
+          <div class="service-arrow">→</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="service-card reveal" onclick="openServicePopup('Королівство гоління','від 400 ₴')">
+      <div class="service-badge">📋 <span data-uk="Записатись" data-pl="Umów się">Записатись</span></div>
+      <div class="service-card-top"><span>🪒</span><img src="service3.jpg" alt="" onerror="this.remove()"></div>
+      <div class="service-card-body">
+        <div class="service-num">03</div>
+        <div class="service-name" data-uk="Королівство гоління" data-pl="Królewskie golenie">Королівство гоління</div>
+        <p class="service-desc" data-uk="Гаряче рушник, піна, бритва. Ритуал справжнього джентльмена." data-pl="Gorący ręcznik, pianka, brzytwa. Rytuał prawdziwego dżentelmena.">Гаряче рушник, піна, бритва. Ритуал справжнього джентльмена.</p>
+        <div class="service-footer">
+          <span class="service-price" data-uk="від 400 ₴" data-pl="od 400 ₴">від 400 ₴</span>
+          <div class="service-arrow">→</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="service-card reveal" onclick="openServicePopup('Оформлення бороди','від 300 ₴')">
+      <div class="service-badge">📋 <span data-uk="Записатись" data-pl="Umów się">Записатись</span></div>
+      <div class="service-card-top"><span>✂️</span><img src="service4.jpg" alt="" onerror="this.remove()"></div>
+      <div class="service-card-body">
+        <div class="service-num">04</div>
+        <div class="service-name" data-uk="Оформлення бороди" data-pl="Stylizacja brody">Оформлення бороди</div>
+        <p class="service-desc" data-uk="Підкреслимо форму, приберемо зайве. Борода що робить заяву." data-pl="Podkreślimy kształt, usuniemy zbędne. Broda, która robi wrażenie.">Підкреслимо форму, приберемо зайве. Борода що робить заяву.</p>
+        <div class="service-footer">
+          <span class="service-price" data-uk="від 300 ₴" data-pl="od 300 ₴">від 300 ₴</span>
+          <div class="service-arrow">→</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="service-card reveal" onclick="openServicePopup('Дитяча стрижка','від 250 ₴')">
+      <div class="service-badge">📋 <span data-uk="Записатись" data-pl="Umów się">Записатись</span></div>
+      <div class="service-card-top"><span>👦</span><img src="service5.jpg" alt="" onerror="this.remove()"></div>
+      <div class="service-card-body">
+        <div class="service-num">05</div>
+        <div class="service-name" data-uk="Дитяча стрижка" data-pl="Strzyżenie dziecięce">Дитяча стрижка</div>
+        <p class="service-desc" data-uk="Акуратно, швидко та з посмішкою. Для юних джентльменів від 3 років." data-pl="Starannie, szybko i z uśmiechem. Dla małych dżentelmenów od 3 lat.">Акуратно, швидко та з посмішкою. Для юних джентльменів від 3 років.</p>
+        <div class="service-footer">
+          <span class="service-price" data-uk="від 250 ₴" data-pl="od 250 ₴">від 250 ₴</span>
+          <div class="service-arrow">→</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="service-card reveal" onclick="openServicePopup('Камуфляж сивини','від 600 ₴')">
+      <div class="service-badge">📋 <span data-uk="Записатись" data-pl="Umów się">Записатись</span></div>
+      <div class="service-card-top"><span>🎨</span><img src="service6.jpg" alt="" onerror="this.remove()"></div>
+      <div class="service-card-body">
+        <div class="service-num">06</div>
+        <div class="service-name" data-uk="Камуфляж сивини" data-pl="Kamuflaż siwizny">Камуфляж сивини</div>
+        <p class="service-desc" data-uk="Натуральний тон, стійкий результат. Виглядай так як ти себе відчуваєш." data-pl="Naturalny odcień, trwały efekt. Wyglądaj tak, jak się czujesz.">Натуральний тон, стійкий результат. Виглядай так як ти себе відчуваєш.</p>
+        <div class="service-footer">
+          <span class="service-price" data-uk="від 600 ₴" data-pl="od 600 ₴">від 600 ₴</span>
+          <div class="service-arrow">→</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="service-card reveal" onclick="openServicePopup('Укладка + стайлінг','від 200 ₴')">
+      <div class="service-badge">📋 <span data-uk="Записатись" data-pl="Umów się">Записатись</span></div>
+      <div class="service-card-top"><span>💥</span><img src="service7.jpg" alt="" onerror="this.remove()"></div>
+      <div class="service-card-body">
+        <div class="service-num">07</div>
+        <div class="service-name" data-uk="Укладка + стайлінг" data-pl="Stylizacja włosów">Укладка + стайлінг</div>
+        <p class="service-desc" data-uk="Pomade, wax, clay — підберемо засіб під твій тип волосся і образ." data-pl="Pomade, wax, clay — dobierzemy produkt do twojego typu włosów.">Pomade, wax, clay — підберемо засіб під твій тип волосся і образ.</p>
+        <div class="service-footer">
+          <span class="service-price" data-uk="від 200 ₴" data-pl="od 200 ₴">від 200 ₴</span>
+          <div class="service-arrow">→</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="service-card reveal" onclick="openServicePopup('Скін-фейд','від 450 ₴')">
+      <div class="service-badge">📋 <span data-uk="Записатись" data-pl="Umów się">Записатись</span></div>
+      <div class="service-card-top"><span>⚡</span><img src="service8.jpg" alt="" onerror="this.remove()"></div>
+      <div class="service-card-body">
+        <div class="service-num">08</div>
+        <div class="service-name" data-uk="Скін-фейд" data-pl="Skin fade">Скін-фейд</div>
+        <p class="service-desc" data-uk="Плавний перехід до шкіри. Технічно складна стрижка для тих, хто хоче максимум." data-pl="Płynne przejście do skóry. Technicznie wymagające strzyżenie dla wymagających.">Плавний перехід до шкіри. Технічно складна стрижка для тих, хто хоче максимум.</p>
+        <div class="service-footer">
+          <span class="service-price" data-uk="від 450 ₴" data-pl="od 450 ₴">від 450 ₴</span>
+          <div class="service-arrow">→</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="service-card vip reveal" onclick="openServicePopup('VIP-пакет','від 900 ₴')">
+      <div class="service-vip-badge">⭐ <span data-uk="Найпопулярніше" data-pl="Najpopularniejsze">Найпопулярніше</span></div>
+      <div class="service-badge">📋 <span data-uk="Записатись" data-pl="Umów się">Записатись</span></div>
+      <div class="service-card-top"><span>👑</span><img src="service9.jpg" alt="" onerror="this.remove()"></div>
+      <div class="service-card-body">
+        <div class="service-num" style="color:var(--gold-light)">09</div>
+        <div class="service-name" data-uk="VIP-пакет" data-pl="Pakiet VIP">VIP-пакет</div>
+        <p class="service-desc" data-uk="Стрижка + борода + гоління + укладка + напій. Все що потрібно справжньому чоловіку." data-pl="Strzyżenie + broda + golenie + stylizacja + drink. Wszystko czego potrzebuje prawdziwy mężczyzna.">Стрижка + борода + гоління + укладка + напій. Все що потрібно справжньому чоловіку.</p>
+        <div class="service-footer">
+          <span class="service-price" data-uk="від 900 ₴" data-pl="od 900 ₴">від 900 ₴</span>
+          <div class="service-arrow">→</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══ REVIEWS ═══ -->
+<div class="divider-clip" style="background:var(--bg-section)"></div>
+<section id="reviews">
+  <div class="reviews-header reveal">
+    <span class="section-tag" data-uk="— ВІДГУКИ" data-pl="— OPINIE">— ВІДГУКИ</span>
+    <h2 class="section-title" data-uk="ЩО КАЖУТЬ КЛІЄНТИ" data-pl="CO MÓWIĄ KLIENCI">ЩО КАЖУТЬ КЛІЄНТИ</h2>
+  </div>
+  <div class="reviews-scroll">
+
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-text" data-uk="«Нарешті знайшов барбера якому можна довіряти. Скін-фейд вийшов ідеальним, а атмосфера в закладі — просто вогонь. Ходжу вже пів року і не збираюсь змінювати.»" data-pl="«W końcu znalazłem barbera, któremu można zaufać. Skin fade wyszedł idealnie. Chodzę już pół roku i nie zamierzam zmieniać.»">«Нарешті знайшов барбера якому можна довіряти. Скін-фейд вийшов ідеальним, а атмосфера в закладі — просто вогонь. Ходжу вже пів року і не збираюсь змінювати.»</p>
+      <div class="review-author">
+        <div class="review-avatar">О</div>
+        <div class="review-meta"><strong>Олексій М.</strong><span>Березень 2025</span></div>
+      </div>
+    </div>
+
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-text" data-uk="«Прийшов на VIP-пакет — вийшов як з обкладинки журналу. Майстер знав що робити без зайвих слів. Найкраще вкладення 900 гривень у своє життя.»" data-pl="«Przyszedłem na pakiet VIP — wyszedłem jak z okładki magazynu. Najlepsza inwestycja 900 hrywien w moje życie.»">«Прийшов на VIP-пакет — вийшов як з обкладинки журналу. Майстер знав що робити без зайвих слів. Найкраще вкладення 900 гривень у своє життя.»</p>
+      <div class="review-author">
+        <div class="review-avatar">Д</div>
+        <div class="review-meta"><strong>Дмитро Л.</strong><span>Лютий 2025</span></div>
+      </div>
+    </div>
+
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-text" data-uk="«Привів сина на дитячу стрижку — він зазвичай боїться. Тут так спокійно і комфортно, що він навіть не помітив. Тепер самі ходимо разом.»" data-pl="«Przyprowadziłem syna — zwykle się boi. Tutaj było tak spokojnie, że nawet nie zauważył. Teraz chodzimy razem.»">«Привів сина на дитячу стрижку — він зазвичай боїться. Тут так спокійно і комфортно, що він навіть не помітив. Тепер самі ходимо разом.»</p>
+      <div class="review-author">
+        <div class="review-avatar">В</div>
+        <div class="review-meta"><strong>Василь К.</strong><span>Січень 2025</span></div>
+      </div>
+    </div>
+
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-text" data-uk="«Королівство гоління — це щось неймовірне. Гаряче рушник, класична піна, бритва. Відчув себе в іншому столітті. BRUTAL CUT тримає рівень.»" data-pl="«Królewskie golenie — coś niesamowitego. Gorący ręcznik, pianka, brzytwa. BRUTAL CUT trzyma poziom.»">«Королівство гоління — це щось неймовірне. Гаряче рушник, класична піна, бритва. Відчув себе в іншому столітті. BRUTAL CUT тримає рівень.»</p>
+      <div class="review-author">
+        <div class="review-avatar">С</div>
+        <div class="review-meta"><strong>Сергій П.</strong><span>Грудень 2024</span></div>
+      </div>
+    </div>
+
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-text" data-uk="«Шукав барбера для камуфляжу сивини довго. Тут зробили натурально — жодна людина не здогадалась. Результат тримається вже 5 тижнів. Рекомендую.»" data-pl="«Długo szukałem barbera do kamuflażu siwizny. Zrobili naturalnie — nikt się nie domyślił. Efekt trzyma się już 5 tygodni.»">«Шукав барбера для камуфляжу сивини довго. Тут зробили натурально — жодна людина не здогадалась. Результат тримається вже 5 тижнів. Рекомендую.»</p>
+      <div class="review-author">
+        <div class="review-avatar">М</div>
+        <div class="review-meta"><strong>Максим Г.</strong><span>Квітень 2025</span></div>
+      </div>
+    </div>
+
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-text" data-uk="«Записався онлайн — о 14:00 майстер вже чекав. Не загубив ні хвилини. Стрижка акуратна, атмосфера темна і стильна. Це моє місце тепер.»" data-pl="«Zapisałem się online — o 14:00 barber już czekał. Nie straciłem ani minuty. Strzyżenie staranne, atmosfera ciemna i stylowa.»">«Записався онлайн — о 14:00 майстер вже чекав. Не загубив ні хвилини. Стрижка акуратна, атмосфера темна і стильна. Це моє місце тепер.»</p>
+      <div class="review-author">
+        <div class="review-avatar">А</div>
+        <div class="review-meta"><strong>Андрій Т.</strong><span>Березень 2025</span></div>
+      </div>
+    </div>
+
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-text" data-uk="«Укладку робили вперше — підібрали саме той засіб і показали як укладати вдома. Тепер волосся лежить так само. Дякую майстру Іллі — справжній профі.»" data-pl="«Stylizację robili po raz pierwszy — dobrali właściwy produkt i pokazali jak układać w domu. Teraz włosy leżą tak samo.»">«Укладку робили вперше — підібрали саме той засіб і показали як укладати вдома. Тепер волосся лежить так само. Дякую майстру Іллі — справжній профі.»</p>
+      <div class="review-author">
+        <div class="review-avatar">І</div>
+        <div class="review-meta"><strong>Ігор Р.</strong><span>Травень 2025</span></div>
+      </div>
+    </div>
+
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-text" data-uk="«Перший раз прийшов без ідеї — просто сказав «роби що вважаєш потрібним». Майстер зробив тейпап з фейдом. Всі знайомі питають де підстригся. Тепер ходжу щомісяця.»" data-pl="«Pierwsza wizyta bez pomysłu — powiedziałem «rób co uważasz». Barber zrobił tapeline z fade. Wszyscy znajomi pytają gdzie się strzyżę.»">«Перший раз прийшов без ідеї — просто сказав «роби що вважаєш потрібним». Майстер зробив тейпап з фейдом. Всі знайомі питають де підстригся. Тепер ходжу щомісяця.»</p>
+      <div class="review-author">
+        <div class="review-avatar">Р</div>
+        <div class="review-meta"><strong>Роман Ш.</strong><span>Квітень 2025</span></div>
+      </div>
+    </div>
+
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-text" data-uk="«Борода була запущена місяцями. Майстер за 30 хвилин зробив з неї щось неймовірне. Форма, лінії — все чітко. Ціна 300 грн — це взагалі безкоштовно за такий результат.»" data-pl="«Broda była zaniedbana od miesięcy. Barber w 30 minut zrobił z niej coś niesamowitego. Forma, linie — wszystko precyzyjne. 300 hrywien to prawie za darmo za taki efekt.»">«Борода була запущена місяцями. Майстер за 30 хвилин зробив з неї щось неймовірне. Форма, лінії — все чітко. Ціна 300 грн — це взагалі безкоштовно за такий результат.»</p>
+      <div class="review-author">
+        <div class="review-avatar">Н</div>
+        <div class="review-meta"><strong>Назар В.</strong><span>Лютий 2025</span></div>
+      </div>
+    </div>
+
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-text" data-uk="«Заходив мимохідь — вийшов постійним клієнтом. Тут не просто стрижуть, тут ставляться до тебе як до людини. Кава, музика, розмова. BRUTAL CUT — це ціла культура.»" data-pl="«Wstąpiłem przypadkiem — wyszedłem jako stały klient. Tu nie tylko strzygą, traktują cię jak człowieka. Kawa, muzyka, rozmowa. BRUTAL CUT to cała kultura.»">«Заходив мимохідь — вийшов постійним клієнтом. Тут не просто стрижуть, тут ставляться до тебе як до людини. Кава, музика, розмова. BRUTAL CUT — це ціла культура.»</p>
+      <div class="review-author">
+        <div class="review-avatar">Є</div>
+        <div class="review-meta"><strong>Євген К.</strong><span>Травень 2025</span></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+<div class="divider-clip-rev" style="background:var(--bg-section)"></div>
+
+<!-- ═══ FAQ ═══ -->
+<section id="faq">
+  <div class="faq-inner">
+    <div class="faq-header reveal">
+      <span class="section-tag" data-uk="— ПИТАННЯ" data-pl="— PYTANIA">— ПИТАННЯ</span>
+      <h2 class="section-title" data-uk="ЧАСТІ ЗАПИТАННЯ" data-pl="CZĘSTO ZADAWANE PYTANIA">ЧАСТІ ЗАПИТАННЯ</h2>
+      <p data-uk="Є питання? Ми маємо відповіді." data-pl="Masz pytania? Mamy odpowiedzi.">Є питання? Ми маємо відповіді.</p>
+    </div>
+    <div class="faq-item reveal" onclick="toggleFaq(this)">
+      <button class="faq-q">
+        <span data-uk="Чи потрібен попередній запис?" data-pl="Czy wymagana jest rezerwacja?">Чи потрібен попередній запис?</span>
+        <div class="faq-toggle">+</div>
+      </button>
+      <div class="faq-a">
+        <p data-uk="Так, рекомендуємо записуватись онлайн або телефоном щоб уникнути очікування. Ми цінуємо ваш час — майстер буде готовий саме о вашому часі. Іноді є вільні місця в останню хвилину — телефонуйте." data-pl="Tak, zalecamy rezerwację online lub telefonicznie, aby uniknąć oczekiwania. Cenimy twój czas — barber będzie gotowy dokładnie o umówionej godzinie. Czasem są wolne miejsca last-minute — zadzwoń.">Так, рекомендуємо записуватись онлайн або телефоном щоб уникнути очікування. Ми цінуємо ваш час — майстер буде готовий саме о вашому часі. Іноді є вільні місця в останню хвилину — телефонуйте.</p>
+      </div>
+    </div>
+    <div class="faq-item reveal" onclick="toggleFaq(this)">
+      <button class="faq-q">
+        <span data-uk="Як підготуватись до першого візиту?" data-pl="Jak przygotować się do pierwszej wizyty?">Як підготуватись до першого візиту?</span>
+        <div class="faq-toggle">+</div>
+      </button>
+      <div class="faq-a">
+        <p data-uk="Нічого особливого не потрібно. Просто приходьте з чистим волоссям та ідеями (або посиланнями на фото). Майстер сам підбере найкращий варіант під форму вашого обличчя і тип волосся." data-pl="Nic specjalnego nie jest wymagane. Przyjdź z czystymi włosami i pomysłami (lub linkami do zdjęć). Barber sam dobierze najlepszy wariant do kształtu twojej twarzy i typu włosów.">Нічого особливого не потрібно. Просто приходьте з чистим волоссям та ідеями (або посиланнями на фото). Майстер сам підбере найкращий варіант під форму вашого обличчя і тип волосся.</p>
+      </div>
+    </div>
+    <div class="faq-item reveal" onclick="toggleFaq(this)">
+      <button class="faq-q">
+        <span data-uk="Скільки часу займає сеанс?" data-pl="Ile czasu trwa wizyta?">Скільки часу займає сеанс?</span>
+        <div class="faq-toggle">+</div>
+      </button>
+      <div class="faq-a">
+        <p data-uk="Звичайна стрижка — 30–45 хвилин. Стрижка + борода — 60–75 хвилин. VIP-пакет — близько 90 хвилин. Ми не поспішаємо — якість важливіша за швидкість." data-pl="Zwykłe strzyżenie — 30–45 minut. Strzyżenie + broda — 60–75 minut. Pakiet VIP — około 90 minut. Nie spieszymy się — jakość jest ważniejsza niż szybkość.">Звичайна стрижка — 30–45 хвилин. Стрижка + борода — 60–75 хвилин. VIP-пакет — близько 90 хвилин. Ми не поспішаємо — якість важливіша за швидкість.</p>
+      </div>
+    </div>
+    <div class="faq-item reveal" onclick="toggleFaq(this)">
+      <button class="faq-q">
+        <span data-uk="З якого віку стрижете дітей?" data-pl="Od jakiego wieku strzyżecie dzieci?">З якого віку стрижете дітей?</span>
+        <div class="faq-toggle">+</div>
+      </button>
+      <div class="faq-a">
+        <p data-uk="Приймаємо юних джентльменів від 3 років. Наші майстри вміють знайти підхід до маленьких клієнтів. Дитяча стрижка проходить у комфортній атмосфері, без сліз і страху." data-pl="Przyjmujemy małych dżentelmenów od 3 lat. Nasi barberzy potrafią znaleźć podejście do najmłodszych klientów. Strzyżenie dziecięce odbywa się w komfortowej atmosferze, bez łez i strachu.">Приймаємо юних джентльменів від 3 років. Наші майстри вміють знайти підхід до маленьких клієнтів. Дитяча стрижка проходить у комфортній атмосфері, без сліз і страху.</p>
+      </div>
+    </div>
+    <div class="faq-cta reveal">
+      <p data-uk="Залишились питання? Записатись на консультацію — безкоштовно." data-pl="Masz jeszcze pytania? Umów się na bezpłatną konsultację.">Залишились питання? Записатись на консультацію — безкоштовно.</p>
+      <button class="btn-primary" onclick="openPopup()">
+        <span data-uk="Записатись" data-pl="Umów się">Записатись</span>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-logo">BRUTAL <span>CUT</span></div>
+      <p class="footer-slogan" data-uk="Стиль що говорить за себе. Барбершоп у серці Києва на Хрещатику." data-pl="Styl, który mówi sam za siebie. Barbershop w sercu Kijowa na Chreszczatyku.">Стиль що говорить за себе. Барбершоп у серці Києва на Хрещатику.</p>
+      <div class="footer-socials">
+        <a href="https://instagram.com/brutalcut.kyiv" class="social-btn" target="_blank" rel="noopener" title="Instagram">📸</a>
+        <a href="https://t.me/brutalcut" class="social-btn" target="_blank" rel="noopener" title="Telegram">✈️</a>
+        <a href="tel:+380930000000" class="social-btn" title="Телефон">📞</a>
+      </div>
+    </div>
+    <div>
+      <h4 data-uk="НАВІГАЦІЯ" data-pl="NAWIGACJA">НАВІГАЦІЯ</h4>
+      <ul class="footer-nav">
+        <li><a href="#about" data-uk="Про нас" data-pl="O nas">Про нас</a></li>
+        <li><a href="#services" data-uk="Послуги" data-pl="Usługi">Послуги</a></li>
+        <li><a href="#reviews" data-uk="Відгуки" data-pl="Opinie">Відгуки</a></li>
+        <li><a href="#faq" data-uk="FAQ" data-pl="FAQ">FAQ</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 data-uk="КОНТАКТИ" data-pl="KONTAKT">КОНТАКТИ</h4>
+      <div class="footer-contacts">
+        <a href="tel:+380930000000" class="footer-contact"><span class="footer-contact-icon">📞</span>+38 (093) 000-00-00</a>
+        <a href="https://instagram.com/brutalcut.kyiv" class="footer-contact" target="_blank" rel="noopener"><span class="footer-contact-icon">📸</span>@brutalcut.kyiv</a>
+        <a href="https://t.me/brutalcut" class="footer-contact" target="_blank" rel="noopener"><span class="footer-contact-icon">✈️</span>@brutalcut</a>
+        <div class="footer-contact"><span class="footer-contact-icon">📍</span><span data-uk="вул. Хрещатик 12, Київ" data-pl="ul. Chreszczatyk 12, Kijów">вул. Хрещатик 12, Київ</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2024–<span id="year"></span> BRUTAL CUT</span>
+    <span data-uk="Всі права захищені" data-pl="Wszelkie prawa zastrzeżone">Всі права захищені</span>
+  </div>
+</footer>
+
+<!-- ═══ POPUP ═══ -->
+<div id="popup-overlay" onclick="handleOverlayClick(event)">
+  <div class="popup-box">
+    <button class="popup-close" onclick="closePopup()">✕</button>
+    <h3 class="popup-title" data-uk="Записатись" data-pl="Umów się">Записатись</h3>
+    <div class="popup-service-badge" id="popup-service-badge">
+      <span>✂️</span>
+      <span id="popup-service-name"></span>
+      <span id="popup-service-price" style="color:var(--text-soft);font-weight:400;margin-left:4px"></span>
+    </div>
+    <form class="popup-form" onsubmit="submitForm(event)">
+      <input type="hidden" id="f-service">
+      <input type="text" id="f-name" data-uk-ph="Ваше ім'я" data-pl-ph="Twoje imię" placeholder="Ваше ім'я" required minlength="2">
+      <input type="tel" id="f-phone" data-uk-ph="+38 (0__) ___-__-__" data-pl-ph="+48 (0__) ___-___" placeholder="+38 (0__) ___-__-__" required>
+      <input type="datetime-local" id="f-date" required>
+      <textarea id="f-comment" data-uk-ph="Коментар (необов'язково)" data-pl-ph="Komentarz (opcjonalnie)" placeholder="Коментар (необов'язково)" rows="3"></textarea>
+      <button type="submit" class="popup-submit" data-uk="Надіслати запит" data-pl="Wyślij zapytanie">Надіслати запит</button>
+    </form>
+  </div>
+</div>
+
+<script>
+/* ═══ CUSTOM CURSOR — FINGER + LAZY TRAIL ═══ */
+const cursor = document.getElementById('cursor');
+const cursorRing = document.getElementById('cursor-ring');
+let mx = 0, my = 0, rx = 0, ry = 0;
+let isOnService = false;
+
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  /* палець позиціонується точно за мишею */
+  cursor.style.left = mx + 'px';
+  cursor.style.top  = my + 'px';
+});
+
+(function animateCursor() {
+  /* повільне наздоганяння на картках послуг, швидке — скрізь */
+  const speed = isOnService ? 0.045 : 0.14;
+  rx += (mx - rx) * speed;
+  ry += (my - ry) * speed;
+  cursorRing.style.left = rx + 'px';
+  cursorRing.style.top  = ry + 'px';
+  requestAnimationFrame(animateCursor);
+})();
+
+/* звичайні інтерактивні елементи */
+document.querySelectorAll('a, button, .faq-item, .review-card, .hero-card').forEach(el => {
+  el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+  el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+});
+
+/* картки послуг — lazy trail */
+document.querySelectorAll('.service-card').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    isOnService = true;
+    document.body.classList.add('cursor-service');
+    document.body.classList.remove('cursor-hover');
+  });
+  el.addEventListener('mouseleave', () => {
+    isOnService = false;
+    document.body.classList.remove('cursor-service');
+  });
+});
+
+/* ═══ NAVBAR ═══ */
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => navbar.classList.toggle('scrolled', window.scrollY > 60));
+
+/* ═══ BURGER ═══ */
+const burgerBtn = document.getElementById('burger');
+const mobileMenu = document.getElementById('mobile-menu');
+function toggleMenu() { burgerBtn.classList.toggle('open'); mobileMenu.classList.toggle('open'); }
+function closeMenu()  { burgerBtn.classList.remove('open'); mobileMenu.classList.remove('open'); }
+
+/* ═══ HERO PARALLAX ═══ */
+const heroBg = document.getElementById('hero-bg');
+const heroEl = document.getElementById('hero');
+let lastMouseX = 0, lastMouseY = 0;
+document.addEventListener('mousemove', e => {
+  lastMouseX = e.clientX; lastMouseY = e.clientY;
+  const cx = (lastMouseX / window.innerWidth  - .5);
+  const cy = (lastMouseY / window.innerHeight - .5);
+  if (window.scrollY < heroEl.offsetHeight)
+    heroBg.style.transform = `translate(${cx * -16}px, ${cy * -16}px)`;
+});
+window.addEventListener('scroll', () => {
+  if (window.scrollY < heroEl.offsetHeight)
+    heroBg.style.transform = `translateY(${window.scrollY * .22}px)`;
+});
+
+/* ═══ SCROLL REVEAL ═══ */
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+}, { threshold: .1 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+/* ═══ PARTICLES ═══ */
+for (let i = 0; i < 15; i++) {
+  const p = document.createElement('div');
+  p.className = 'particle';
+  const size = Math.random() * 6 + 3;
+  p.style.cssText = `width:${size}px;height:${size}px;left:${Math.random()*100}vw;animation-duration:${Math.random()*12+12}s;animation-delay:${Math.random()*14}s;`;
+  document.body.appendChild(p);
+}
+
+/* ═══ FAQ ═══ */
+function toggleFaq(item) {
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+  if (!isOpen) item.classList.add('open');
+}
+
+/* ═══ POPUP ═══ */
+function openPopup() { document.getElementById('popup-overlay').classList.add('open'); document.body.style.overflow = 'hidden'; }
+function closePopup() {
+  document.getElementById('popup-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+  document.getElementById('popup-service-badge').classList.remove('show');
+  document.getElementById('f-service').value = '';
+}
+function handleOverlayClick(e) { if (e.target === document.getElementById('popup-overlay')) closePopup(); }
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closePopup(); });
+
+function openServicePopup(name, price) {
+  document.getElementById('f-service').value = name;
+  document.getElementById('popup-service-name').textContent = name;
+  document.getElementById('popup-service-price').textContent = price;
+  document.getElementById('popup-service-badge').classList.add('show');
+  openPopup();
+}
+
+function submitForm(e) {
+  e.preventDefault();
+  const name    = document.getElementById('f-name').value;
+  const phone   = document.getElementById('f-phone').value;
+  const date    = document.getElementById('f-date').value;
+  const comment = document.getElementById('f-comment').value;
+  const service = document.getElementById('f-service').value;
+
+  // Telegram webhook (закоментований, готовий до підключення):
+  // fetch('https://api.telegram.org/bot{TOKEN}/sendMessage', {
+  //   method: 'POST',
+  //   headers: { 'Content-Type': 'application/json' },
+  //   body: JSON.stringify({
+  //     chat_id: '{CHAT_ID}',
+  //     text: `📋 Нова заявка!\n✂️ ${service}\n👤 ${name}\n📞 ${phone}\n📅 ${date}\n💬 ${comment}`
+  //   })
+  // });
+
+  alert(`✂️ Дякуємо, ${name}!\n\nВаш запит прийнято. Ми зв'яжемось з вами за номером ${phone} найближчим часом.\n\nBRUTAL CUT · Київ`);
+  e.target.reset();
+  closePopup();
+}
+
+/* ═══ LANGUAGE SWITCH ═══ */
+function setLang(lang) {
+  document.documentElement.lang = lang;
+  document.querySelectorAll('[data-uk]').forEach(el => {
+    const val = el.getAttribute('data-' + lang);
+    if (val) el.textContent = val;
+  });
+  document.querySelectorAll('[data-uk-ph]').forEach(el => {
+    const val = el.getAttribute('data-' + lang + '-ph');
+    if (val) el.placeholder = val;
+  });
+  document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.toggle('active', btn.textContent === lang.toUpperCase()));
+}
+
+/* ═══ YEAR ═══ */
+document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
