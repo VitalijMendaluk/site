@@ -292,6 +292,11 @@ nav.scrolled {
   background: linear-gradient(90deg, rgba(0,0,0,.85) 0%, rgba(0,0,0,.5) 50%, rgba(0,0,0,.15) 100%);
   pointer-events: none;
 }
+@media (max-width: 960px) {
+  #hero-overlay {
+    background: rgba(0,0,0,.70); /* мобільний — рівномірно темний, текст читабельний */
+  }
+}
 .hero-scanlines {
   position: absolute;
   inset: 0;
@@ -1049,14 +1054,20 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 
 /* ═══ RESPONSIVE ═══ */
 @media (max-width: 960px) {
-  nav { padding: 0 20px; height: 60px; }
+  /* Мобільний navbar — ЗАВЖДИ темний, текст не просвічує */
+  nav {
+    padding: 0 20px;
+    height: 60px;
+    background: rgba(10,10,10,.97) !important;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(201,168,76,.15) !important;
+  }
   .nav-links { display: none; }
-  /* Мобільний хедер: тільки логотип + бургер */
   .nav-right .lang-switch { display: none; }
   .nav-right .btn-book { display: none; }
   .nav-logo { font-size: 19px; }
   .burger { display: flex; }
-  /* UA/PL перемикач переносимо в мобільне меню */
   .mobile-menu { padding: 20px 20px 28px; }
 
   /* Hero → 1 колонка */
@@ -1067,8 +1078,10 @@ input[type="time"]::-webkit-calendar-picker-indicator {
     margin-top: -60px;
   }
   .hero-left {
-    padding: 92px 0 20px;
+    padding: 80px 0 20px; /* 60px nav + 20px повітря */
   }
+  /* badge на мобільному прибираємо — вже є лого в nav */
+  .hero-badge { display: none; }
   .hero-right {
     padding: 8px 0 64px;
     gap: 20px;
@@ -1104,10 +1117,9 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   .mobile-menu { top: 56px; padding: 14px 16px 20px; }
 
   #hero { padding: 0 16px; margin-top: -56px; }
-  .hero-left { padding: 80px 0 16px; }
+  .hero-left { padding: 74px 0 16px; }
   .hero-right { padding: 4px 0 52px; }
   .hero-left h1 { font-size: clamp(30px, 10vw, 46px); margin-bottom: 14px; }
-  .hero-badge { font-size: 10px; padding: 5px 12px; margin-bottom: 14px; }
   .hero-cards-grid { grid-template-columns: 1fr; gap: 6px; }
   .hero-card:last-child { grid-column: auto; }
   .hero-card { padding: 9px 10px; }
