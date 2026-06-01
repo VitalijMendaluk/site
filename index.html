@@ -1825,19 +1825,39 @@ function submitForm(e) {
   const comment = document.getElementById('f-comment').value;
   const service = document.getElementById('f-service').value;
 
-  // Telegram webhook (закоментований, готовий до підключення):
-  // fetch('https://api.telegram.org/bot{TOKEN}/sendMessage', {
-  //   method: 'POST',
-  //   headers: { 'Content-Type': 'application/json' },
-  //   body: JSON.stringify({
-  //     chat_id: '{CHAT_ID}',
-  //     text: `📋 Нова заявка!\n✂️ ${service}\n👤 ${name}\n📞 ${phone}\n📅 ${date} ${time}\n💬 ${comment}`
-  //   })
-  // });
+  const text =
+    `📋 *Нова заявка — BRUTAL CUT*\n` +
+    `✂️ Послуга: ${service || 'не вказано'}\n` +
+    `👤 Ім'я: ${name}\n` +
+    `📞 Телефон: ${phone}\n` +
+    `📅 Дата: ${date}  🕐 Час: ${time}\n` +
+    (comment ? `💬 Коментар: ${comment}` : '');
 
-  alert(`✂️ Дякуємо, ${name}!\n\nВаш запит прийнято. Ми зв'яжемось з вами за номером ${phone} найближчим часом.\n\nBRUTAL CUT · Київ`);
-  e.target.reset();
-  closePopup();
+  fetch('https://api.telegram.org/bot8090010233:AAGucMxosOir1f7ttPIUODULMbO2DYoqTHU/sendMessage', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      chat_id: '-4934715371',
+      text: text,
+      parse_mode: 'Markdown'
+    })
+  })
+  .then(r => r.json())
+  .then(data => {
+    if (data.ok) {
+      alert(`✂️ Дякуємо, ${name}!\n\nВаш запит надіслано. Ми зв'яжемось з вами за номером ${phone} найближчим часом.\n\nBRUTAL CUT · Київ`);
+    } else {
+      alert(`✂️ Дякуємо, ${name}! Ваш запит прийнято.\n\nМи зв'яжемось з вами незабаром.`);
+      console.warn('Telegram error:', data);
+    }
+    e.target.reset();
+    closePopup();
+  })
+  .catch(() => {
+    alert(`✂️ Дякуємо, ${name}! Ваш запит прийнято.\n\nМи зв'яжемось з вами незабаром.`);
+    e.target.reset();
+    closePopup();
+  });
 }
 
 /* ═══ LANGUAGE SWITCH ═══ */
