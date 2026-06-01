@@ -218,30 +218,42 @@ nav.scrolled {
   display: none;
   position: fixed;
   top: 70px; left: 0; right: 0;
-  background: rgba(13,13,13,.98);
-  backdrop-filter: blur(20px);
-  padding: 24px 48px 32px;
+  background: rgba(10,10,10,.98);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  padding: 16px 20px 24px;
   flex-direction: column;
-  gap: 8px;
+  gap: 4px;
   z-index: 999;
   border-bottom: 1px solid rgba(201,168,76,.15);
 }
 .mobile-menu.open { display: flex; }
 .mobile-menu a {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
-  letter-spacing: .12em;
+  letter-spacing: .1em;
   text-transform: uppercase;
   color: var(--text-soft);
-  padding: 12px 0;
+  padding: 13px 0;
   border-bottom: 1px solid rgba(255,255,255,.06);
   transition: color var(--tr);
 }
 .mobile-menu a:hover { color: var(--gold); }
-.mobile-menu .btn-book {
-  margin-top: 12px;
-  display: block;
+.mobile-menu-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 14px;
+  gap: 12px;
+}
+.mobile-menu-bottom .btn-book {
+  flex: 1;
   text-align: center;
+  padding: 11px 16px;
+  min-height: 44px;
+}
+@media (max-width: 960px) {
+  .mobile-menu { top: 60px; }
 }
 
 /* ═══ HERO ═══ */
@@ -1037,22 +1049,28 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 
 /* ═══ RESPONSIVE ═══ */
 @media (max-width: 960px) {
-  nav { padding: 0 20px; }
+  nav { padding: 0 20px; height: 60px; }
   .nav-links { display: none; }
+  /* Мобільний хедер: тільки логотип + бургер */
+  .nav-right .lang-switch { display: none; }
+  .nav-right .btn-book { display: none; }
+  .nav-logo { font-size: 19px; }
   .burger { display: flex; }
+  /* UA/PL перемикач переносимо в мобільне меню */
   .mobile-menu { padding: 20px 20px 28px; }
 
-  /* Hero → 1 колонка: ліва (badge+h1+bullets), потім права (UTP+buttons) */
+  /* Hero → 1 колонка */
   #hero {
     grid-template-columns: 1fr;
     padding: 0 20px;
     gap: 0;
+    margin-top: -60px;
   }
   .hero-left {
-    padding: 100px 0 20px;
+    padding: 92px 0 20px;
   }
   .hero-right {
-    padding: 8px 0 72px;
+    padding: 8px 0 64px;
     gap: 20px;
     order: 1;
   }
@@ -1081,15 +1099,15 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 }
 
 @media (max-width: 480px) {
-  nav { padding: 0 16px; }
-  .nav-logo { font-size: 18px; }
-  .mobile-menu { padding: 16px 16px 24px; }
+  nav { padding: 0 16px; height: 56px; }
+  .nav-logo { font-size: 17px; }
+  .mobile-menu { top: 56px; padding: 14px 16px 20px; }
 
-  #hero { padding: 0 16px; }
-  .hero-left { padding: 88px 0 16px; }
-  .hero-right { padding: 4px 0 60px; }
-  .hero-left h1 { font-size: clamp(32px, 10vw, 48px); margin-bottom: 16px; }
-  .hero-badge { font-size: 10px; padding: 6px 12px; margin-bottom: 16px; }
+  #hero { padding: 0 16px; margin-top: -56px; }
+  .hero-left { padding: 80px 0 16px; }
+  .hero-right { padding: 4px 0 52px; }
+  .hero-left h1 { font-size: clamp(30px, 10vw, 46px); margin-bottom: 14px; }
+  .hero-badge { font-size: 10px; padding: 5px 12px; margin-bottom: 14px; }
   .hero-cards-grid { grid-template-columns: 1fr; gap: 6px; }
   .hero-card:last-child { grid-column: auto; }
   .hero-card { padding: 9px 10px; }
@@ -1144,7 +1162,13 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   <a href="#services" onclick="closeMenu()" data-uk="Послуги" data-pl="Usługi">Послуги</a>
   <a href="#reviews" onclick="closeMenu()" data-uk="Відгуки" data-pl="Opinie">Відгуки</a>
   <a href="#faq" onclick="closeMenu()" data-uk="FAQ" data-pl="FAQ">FAQ</a>
-  <button class="btn-book" onclick="openPopup();closeMenu()" data-uk="Записатись" data-pl="Umów wizytę">Записатись</button>
+  <div class="mobile-menu-bottom">
+    <div class="lang-switch">
+      <button class="lang-btn active" onclick="setLang('uk')">UA</button>
+      <button class="lang-btn" onclick="setLang('pl')">PL</button>
+    </div>
+    <button class="btn-book" onclick="openPopup();closeMenu()" data-uk="Записатись" data-pl="Umów wizytę">Записатись</button>
+  </div>
 </div>
 
 <!-- ═══ HERO ═══ -->
