@@ -446,9 +446,16 @@ nav.scrolled {
   padding: 120px 0 80px;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end; /* притиснути до низу */
-  gap: 24px;
+  justify-content: flex-end;
+  align-items: flex-end;   /* контент до правого краю колонки */
   align-self: stretch;
+  gap: 24px;
+}
+.hero-utp {
+  text-align: right;
+}
+.hero-btns {
+  justify-content: flex-end;
 }
 .hero-utp {
   font-size: 17px;
@@ -1128,8 +1135,10 @@ input[type="time"]::-webkit-calendar-picker-indicator {
     padding: 28px 0 64px;
     gap: 18px;
     order: 1;
+    align-items: flex-start; /* мобільний — по лівому краю */
   }
-  .hero-utp { font-size: 15px; max-width: 100%; }
+  .hero-utp { font-size: 15px; max-width: 100%; text-align: left; }
+  .hero-btns { justify-content: flex-start; }
   .hero-cards-grid { grid-template-columns: 1fr 1fr; }
 
   .services-grid { grid-template-columns: repeat(2, 1fr); }
