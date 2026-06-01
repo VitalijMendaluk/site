@@ -1086,7 +1086,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
     margin-top: -60px;
   }
   .hero-left {
-    padding: 80px 0 20px; /* 60px nav + 20px повітря */
+    padding: 136px 0 20px; /* nav(60) + |margin-top|(60) + 16px gap */
   }
   /* badge на мобільному прибираємо — вже є лого в nav */
   .hero-badge { display: none; }
@@ -1125,7 +1125,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   .mobile-menu { top: 56px; padding: 14px 16px 20px; }
 
   #hero { padding: 0 16px; margin-top: -56px; }
-  .hero-left { padding: 72px 0 14px; }
+  .hero-left { padding: 128px 0 14px; /* nav(56) + |margin|(56) + 16px */ }
   .hero-right { padding: 24px 0 48px; }
   .hero-left h1 { font-size: clamp(28px, 10vw, 44px); margin-bottom: 12px; }
   .hero-cards-grid { grid-template-columns: 1fr; gap: 6px; }
